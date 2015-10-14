@@ -2,14 +2,12 @@ _ = require('lodash')
 request = require('request-promise')
 Url = require('url')
 Promise = require("bluebird")
-Keen = require "keen.io"
 parseXml = Promise.promisify(require('xml2js').parseString)
 processors = require('xml2js/lib/processors')
 inspect = require("util").inspect
+{fmiApiKey, place, mapping, hoursBack, sensorServer} = require('./config.coffee')
+SensorClient = require("sensor-client")(sensorServer)
 
-{fmiApiKey, place, mapping, hoursBack, keenConfig} = require('./config.coffee')
-
-keenClient = Keen.configure keenConfig
 log = (x) -> console.log(inspect(x, true, 10))
 formatDateFmi = (d) -> d.toISOString().substring(0, 19) + "Z"
 
@@ -46,8 +44,9 @@ request(Url.format(url))
     if observation?
       observation.data.forEach (event) ->
         keenEvent = _.assign({value: parseFloat(event.value), keen: { timestamp: event.time }}, value)
+        keenEvent.collection = "fmi"
         console.log keenEvent
-        keenClient.addEvent "fmi", keenEvent, (err, res) ->
-          if err
-            console.log "Keen error:  " + err
+        SensorClient.send(keenEvent)
+          .catch (err) -> console.log "Keen error:  " + err
+          .then (result) -> console.log "Sent"
 )

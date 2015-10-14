@@ -1,6 +1,7 @@
-## fmi2keen
+## fmi-to-sensor
 
-Sends observations from [FMI Open data](https://en.ilmatieteenlaitos.fi/open-data) to [Keen.IO](https://keen.io/).
+Sends observations from [FMI Open data](https://en.ilmatieteenlaitos.fi/open-data) to
+ [sensor-server](https://github.com/raimohanska/sensor-server).
 
 ## Installation
 
@@ -20,18 +21,14 @@ module.exports =
     "obs-obs-1-1-t2m": { location: "Tapiola", source: "fmi", type: "temperature"}
     "obs-obs-1-1-rh": { location: "Tapiola", source: "fmi", type: "humidity"}
   hoursBack: 20
-  keenConfig:
-    projectId: "your-keen-project-id"
-    writeKey: "your-keen-write-key"
+  sensorServer: "http://192.168.1.2:5080/event"
 ```
-
-You need to add your own FMI API key and Keen.io projectid/writekey there.
 
 ## Running
 
 Just do
 
-    ./fmi2keen
+    ./fmi2sensor
 
 And there you go!
 
@@ -39,6 +36,6 @@ And there you go!
 
 Use cron! Add the following line to `/etc/crontab`.
 
-    0  *    * * *   pi      cd /home/pi/fmi && ./fmi2keen >> log.txt 2>&1
+    0  *    * * *   pi      cd /home/pi/fmi && ./fmi2sensor >> log.txt 2>&1
 
 Make sure to replace the `/hom/pi/fmi` path with your local installation path.
