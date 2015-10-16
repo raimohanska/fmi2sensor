@@ -48,5 +48,5 @@ request(Url.format(url))
         console.log sensorEvent
         SensorClient.send(sensorEvent)
           .catch (err) -> console.log "Sensor server error:  " + err
-          .then (result) -> console.log "Sent"
+          .then (result) ->
 )
