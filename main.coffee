@@ -43,10 +43,10 @@ request(Url.format(url))
     observation = _.find(result, { id: key })
     if observation?
       observation.data.forEach (event) ->
-        keenEvent = _.assign({value: parseFloat(event.value), keen: { timestamp: event.time }}, value)
-        keenEvent.collection = "fmi"
-        console.log keenEvent
-        SensorClient.send(keenEvent)
-          .catch (err) -> console.log "Keen error:  " + err
+        sensorEvent = _.assign({value: parseFloat(event.value), timestamp: event.time }, value)
+        sensorEvent.collection = "fmi"
+        console.log sensorEvent
+        SensorClient.send(sensorEvent)
+          .catch (err) -> console.log "Sensor server error:  " + err
           .then (result) -> console.log "Sent"
 )
