@@ -5,7 +5,7 @@ Promise = require("bluebird")
 parseXml = Promise.promisify(require('xml2js').parseString)
 processors = require('xml2js/lib/processors')
 inspect = require("util").inspect
-{fmiApiKey, place, mapping, hoursBack, sensorServer} = require('./config.coffee')
+{ place, mapping, hoursBack, sensorServer} = require('./config.coffee')
 SensorClient = require("sensor-client")(sensorServer)
 
 log = (x) -> console.log(inspect(x, true, 10))
@@ -14,7 +14,7 @@ formatDateFmi = (d) -> d.toISOString().substring(0, 19) + "Z"
 endTime = new Date()
 startTime = new Date(endTime.getTime() - (hoursBack * 3600000))
 
-url = Url.parse('http://data.fmi.fi/fmi-apikey/' + fmiApiKey + '/wfs')
+url = Url.parse('http://opendata.fmi.fi/wfs')
 
 url.query = {
   request:"getFeature"
